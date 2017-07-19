@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+body, html{
+   padding:0;
+   margin:0; 
+}
+
+/*Overrading input placehold to be slightly dark than default*/
+.mat-input-placeholder{
+    color:rgba(0, 0, 0, 0.58)
+}
+
+.mat-input-underline{
+   border-top-color: rgba(0, 0, 0, 0.22);
+}

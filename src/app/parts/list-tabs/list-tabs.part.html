@@ -1,0 +1,40 @@
+<md-tab-group>
+  <md-tab label="Friends">
+
+    <ng-container *ngIf="1">
+      <md-list>
+        <md-list-item *ngFor="let friend of friends | async">
+        <div></div>  {{ friend.firstName }} {{ friend.lastName }} <span class="contribution-span">{{ friend.totalContribution  | currency:'USD':true:'1.2-2'}}</span>
+        </md-list-item>
+      </md-list>
+    </ng-container>
+
+  </md-tab>
+  <md-tab label="City">
+
+    <md-list>
+      <md-list-item>Item 1</md-list-item>
+      <md-list-item>Item 2</md-list-item>
+      <md-list-item>Item 3</md-list-item>
+    </md-list>
+  
+  </md-tab>
+  <md-tab label="Country">
+
+    <md-list>
+      <md-list-item>Item 1</md-list-item>
+      <md-list-item>Item 2</md-list-item>
+      <md-list-item>Item 3</md-list-item>
+    </md-list>
+  
+  </md-tab>
+  <md-tab label="World">
+
+    <md-list>
+      <md-list-item>Item 1</md-list-item>
+      <md-list-item>Item 2</md-list-item>
+      <md-list-item>Item 3</md-list-item>
+    </md-list>
+  
+  </md-tab>
+</md-tab-group>
