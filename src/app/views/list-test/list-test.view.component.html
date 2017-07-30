@@ -1,0 +1,9 @@
+<div #listContainer class="list-container">
+    <div
+    *ngFor="let item of list" 
+    class="list-item"
+    [ngStyle]="makeListItemStyle(item.index,list)"
+    >
+        {{item.name}}|{{item.amount}}
+    </div>
+</div>

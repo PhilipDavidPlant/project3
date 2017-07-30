@@ -17,6 +17,7 @@ import { ListTabsPart } from './parts/list-tabs/list-tabs.part';
 
 //Views
 import { LoginViewComponent } from './views/login/login.view.component';
+import { ListTestViewComponent } from './views/list-test/list-test.view.component';
 
 //Angular Firebase
 import { AngularFireModule } from 'angularfire2';
@@ -24,18 +25,19 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
+//Routes
 const routes :Routes = [
   { path:"", component: ListTabsPart },
-  { path:"authenticate", component: LoginViewComponent }
+  { path:"authenticate", component: LoginViewComponent },
+  { path:"list-test", component: ListTestViewComponent }
 ]
-
-
 
 @NgModule({
   declarations: [
     AppComponent,
     ListTabsPart,
-    LoginViewComponent
+    LoginViewComponent,
+    ListTestViewComponent
   ],
   imports: [
     BrowserModule,

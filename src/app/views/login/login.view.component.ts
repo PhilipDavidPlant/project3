@@ -10,17 +10,31 @@ import * as firebase from 'firebase/app';
 })
 export class LoginViewComponent {
 
-  user: Observable<firebase.User>;
+  userStream: Observable<firebase.User>;
+  userProfile: any;
 
   constructor(public afAuth: AngularFireAuth) {
-    this.user = afAuth.authState;
+    this.userStream = afAuth.authState;
   }
 
-  login() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  loginWithFacebook() {
+    let provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope("user_friends");
+
+    this.afAuth.auth.signInWithPopup(provider).catch( error => {
+      console.log(error);
+    }).then( result =>{
+        var token = result.credential.accessToken;
+        console.log(result);
+      }
+    );
+
+    this.userStream.subscribe( (profile) => {
+      this.userProfile = profile;
+    });
   }
 
   logout() {
-    this.afAuth.auth.signOut();
+    this.afAuth.auth.signOut().then( r => console.log("logged out"));
   }
 }
