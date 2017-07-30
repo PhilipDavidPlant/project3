@@ -1,5 +1,6 @@
 import {Component, OnInit, Renderer2, ViewChild, QueryList, ElementRef, AfterViewInit} from '@angular/core';
-
+import { Observable, Observer, Subject } from 'rxjs';
+import 'rxjs/Rx';
 @Component({
     selector:'list-test-view',
     templateUrl:'list-test.view.component.html',
@@ -21,54 +22,79 @@ export class ListTestViewComponent implements OnInit, AfterViewInit {
         { name:'Kim',       amount:200 }
     ];
 
+    dataStream: Subject<ListItem[]>;
+    sortedAndIndexedDataStream: Observable<ListItem[]>;
+
     ngOnInit(){
+
+        this.dataStream = new Subject<ListItem[]>();
+
         setInterval( e => {
 
             this.list.forEach( (item, index) => {
                 item.amount = Math.floor((Math.random() * 100) + 1);
-                item.index = index;
             });
+
+            this.dataStream.next(this.list);
 
         },3000);
 
-        setInterval( e => {
-            for(let i=0; i< this.list.length; i++){
-                if(this.list[i].index != 0 && i != 0){
-                    if(this.list[i].index && this.list[i].amount > this.list[i-1].amount){
-                        let holdIndex = this.list[i].index;
-                        this.list[i].index = this.list[i-1].index;
-                        this.list[i-1].index = holdIndex;
-                    }
-                }
-            }
-        },500);
+        this.sortedAndIndexedDataStream = this.dataStream.map((list:ListItem[])=>{
+            //list.sort((a, b) => b.amount-a.amount);
+            this.setIndices(list);
+            //console.log(list);
+            return list;
+        });
 
+    }
+
+    setIndices(list: any[]){
+        let listClone = list.slice(0);
+        listClone.sort( (a,b) => b.amount-a.amount);
+        listClone.forEach((element,i) => {
+            let placementIndex = 0;
+            list.forEach( (val, index) => {
+                if(val.name == element.name) return placementIndex = index;
+            });
+            list[placementIndex].velocity = Math.abs(list[placementIndex].index - i);
+            if(list[placementIndex].index > i){
+                list[placementIndex].direction = 1;
+            }else if(list[placementIndex].index < i){
+                list[placementIndex].direction = -1;
+            }else{
+                list[placementIndex].direction = 0;
+            }
+            list[placementIndex].index = i;
+        });
     }
 
     ngAfterViewInit(){
         let listItems = this.listContainer.nativeElement.children;
         for(let item of listItems){
-            item.addEventListener("webkitAnimationEnd", ()=>{this.animationCallback});
-            item.addEventListener("animationend", ()=>{this.animationCallback});
-            item.addEventListener("oanimationend", ()=>{this.animationCallback});
+            item.addEventListener("transitionend", (e)=>{this.animationCallback(e);});
+            item.addEventListener("webkitAnimationEnd", (e)=>{this.animationCallback(e);});
+            item.addEventListener("animationend", (e)=>{this.animationCallback(e);});
+            item.addEventListener("oanimationend", (e)=>{this.animationCallback(e);});
+            item.addEventListener("ontransitionend", (e)=>{this.animationCallback(e);});
+            item.addEventListener("webkitTransitionEnd", (e)=>{this.animationCallback(e);});
         }
     }
 
-    animationCallback(){
-        console.log("animationFinished");
+    animationCallback(event :any){
+        console.log(event);
+        //this.renderer.removeClass(event.,"going-up");
+        //this.renderer.removeClass(event.target,"going-down");
     }
 
-    makeListItemStyle(index:number, list:any[]):Object{
-        if(index){
+    makeListItemStyle(listItem:ListItem,listLength:number):Object{
+        if(listItem.index){
             return {
-                'z-index': list.length - index ,
-                'top': (40 * index) + 'px'
+                'z-index': (listItem.direction + 3),
+                'top': (40 * listItem.index) + 'px',
+                'transition-duration': (0.5 + (listItem.velocity/listLength)) + "s"
             };
         }else{
-            return {
-                'z-index': list.length - index ,
-                'top': '0px'
-            }; 
+            return {}; 
         }
     }
 
@@ -78,4 +104,6 @@ interface ListItem {
     name:string;
     amount:number;
     index?:number;
+    velocity?:number;
+    direction?:number;
 }

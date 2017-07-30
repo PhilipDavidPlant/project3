@@ -10,5 +10,14 @@
     position:absolute;
     background:white;
     width:100%;
-    transition:1s;
+    transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+}
+
+.going-up{
+   box-shadow: 5px 5px 5px 5px rgba(0,0,0,0.3); 
+}
+
+.going-down{
+    background:rgb(240,240,240);
 }

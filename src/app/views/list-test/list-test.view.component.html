@@ -1,8 +1,12 @@
 <div #listContainer class="list-container">
     <div
-    *ngFor="let item of list" 
+    *ngFor="let item of sortedAndIndexedDataStream | async " 
     class="list-item"
-    [ngStyle]="makeListItemStyle(item.index,list)"
+    [ngStyle]="makeListItemStyle(item,list.length)"
+    [ngClass]="{ 
+        'going-up': (item.direction == 1),
+        'going-down': (item.direction == -1)
+    }"
     >
         {{item.name}}|{{item.amount}}
     </div>
