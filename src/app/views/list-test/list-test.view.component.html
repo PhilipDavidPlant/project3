@@ -1,13 +1,36 @@
 <div #listContainer class="list-container">
     <div
+     id="amtctnr"
     *ngFor="let item of sortedAndIndexedDataStream | async " 
-    class="list-item"
+    class="list-item-container"
     [ngStyle]="makeListItemStyle(item,list.length)"
-    [ngClass]="{ 
-        'going-up': (item.direction == 1),
-        'going-down': (item.direction == -1)
-    }"
+    (transitionend)="animationCallback(item,$event)"
     >
-        {{item.name}}|{{item.amount}}
+        <div class="list-item">
+            <div class="list-ranking"
+            [ngClass]="{'ranking-moving': (item.dynamics.direction !== 0)}"
+            >{{(item.dynamics.index + 1)}}</div>
+            <div class="profile-pic"
+            [ngStyle]="makeProfilePic(item)"
+             ></div>
+            <div class="name-container"
+            [ngClass]="{
+                'name-going-up': (item.dynamics.direction === 1),
+                'name-going-down': (item.dynamics.direction === -1)
+            }"
+            >
+                {{item.firstName}}<br/>
+                <span class="other-names">{{item.otherNames}}</span>
+            </div>
+            <div class="awards-container"></div>
+            <div 
+            class="amount-container"
+            [ngClass]="{ 
+                'amount-going-up': (item.dynamics.direction === 1),
+                'amount-going-down': (item.dynamics.direction === -1)
+            }"
+            >{{item.amount | currency:'USD':true:'1.2-2'}}
+            </div>
+        </div>
     </div>
 </div>

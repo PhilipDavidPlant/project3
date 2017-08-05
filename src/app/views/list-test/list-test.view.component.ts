@@ -1,48 +1,58 @@
-import {Component, OnInit, Renderer2, ViewChild, QueryList, ElementRef, AfterViewInit} from '@angular/core';
-import { Observable, Observer, Subject } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { Observer } from 'rxjs/Observer';
 import 'rxjs/Rx';
+
 @Component({
     selector:'list-test-view',
     templateUrl:'list-test.view.component.html',
     styleUrls:['list-test.view.component.css']
 })
 
-export class ListTestViewComponent implements OnInit, AfterViewInit {
+export class ListTestViewComponent implements OnInit {
 
-    @ViewChild("listContainer") private listContainer : ElementRef;
+    list: IListItem[];
 
-    constructor(private renderer:Renderer2){}
+    constructor(){
+        this.list= [
+            { firstName:'Philip', otherNames:"David Plant",  profileImagePath:'../../../assets/images/pf6.jpg', amount:100 },
+            { firstName:'Marcel', otherNames:"Maurice Plant",   profileImagePath:'../../../assets/images/pf5.jpg', amount:90 },
+            { firstName:'Charlotte', otherNames:"Plant", profileImagePath:'../../../assets/images/pf1.jpg', amount:80 },
+            { firstName:'Simon', otherNames:"Plant", profileImagePath:'../../../assets/images/pf4.jpg', amount:70 },
+            { firstName:'Mum', otherNames:"Plant", profileImagePath:'../../../assets/images/pf2.jpg', amount:60 },
+            { firstName:'Kim', otherNames:"Williamson", profileImagePath:'../../../assets/images/pf3.jpg', amount:50 },
+            { firstName:'Connor', otherNames:"Fields", profileImagePath:'../../../assets/images/pf6.jpg', amount:40 },
+            { firstName:'James', otherNames:"Gilliland", profileImagePath:'../../../assets/images/pf6.jpg', amount:30 }
+        ]
 
-    list: ListItem[] = [
-        { name:'Philip',    amount:100 },
-        { name:'Marcel',    amount:150 },
-        { name:'Charlotte',       amount:120 },
-        { name:'Simon', amount:110 },
-        { name:'Mum',     amount:130 },
-        { name:'Kim',       amount:200 }
-    ];
+        this.list.forEach(element => {
+            element.dynamics = {};
+        });
+    }
 
-    dataStream: Subject<ListItem[]>;
-    sortedAndIndexedDataStream: Observable<ListItem[]>;
+    dataStream: Subject<IListItem[]>;
+    sortedAndIndexedDataStream: Observable<IListItem[]>;
 
     ngOnInit(){
 
-        this.dataStream = new Subject<ListItem[]>();
+        this.dataStream = new Subject<IListItem[]>();
 
         setInterval( e => {
 
-            this.list.forEach( (item, index) => {
-                item.amount = Math.floor((Math.random() * 100) + 1);
-            });
+            // this.list.forEach( (item, index,list) => {
+            //     item.amount = Math.floor((Math.random() * 10000) + 1);
+            // });
+
+            this.list[5].amount += 10;
 
             this.dataStream.next(this.list);
 
         },3000);
 
-        this.sortedAndIndexedDataStream = this.dataStream.map((list:ListItem[])=>{
-            //list.sort((a, b) => b.amount-a.amount);
+        this.sortedAndIndexedDataStream = this.dataStream.map((list:IListItem[])=>{
             this.setIndices(list);
-            //console.log(list);
             return list;
         });
 
@@ -54,55 +64,59 @@ export class ListTestViewComponent implements OnInit, AfterViewInit {
         listClone.forEach((element,i) => {
             let placementIndex = 0;
             list.forEach( (val, index) => {
-                if(val.name == element.name) return placementIndex = index;
+                if(val.firstName == element.firstName) return placementIndex = index;
             });
-            list[placementIndex].velocity = Math.abs(list[placementIndex].index - i);
-            if(list[placementIndex].index > i){
-                list[placementIndex].direction = 1;
-            }else if(list[placementIndex].index < i){
-                list[placementIndex].direction = -1;
+            list[placementIndex].dynamics.velocity = Math.abs(list[placementIndex].dynamics.index - i);
+            if(list[placementIndex].dynamics.index > i){
+                list[placementIndex].dynamics.direction = 1;
+            }else if(list[placementIndex].dynamics.index < i){
+                list[placementIndex].dynamics.direction = -1;
             }else{
-                list[placementIndex].direction = 0;
+                list[placementIndex].dynamics.direction = 0;
             }
-            list[placementIndex].index = i;
+            list[placementIndex].dynamics.index = i;
         });
     }
 
-    ngAfterViewInit(){
-        let listItems = this.listContainer.nativeElement.children;
-        for(let item of listItems){
-            item.addEventListener("transitionend", (e)=>{this.animationCallback(e);});
-            item.addEventListener("webkitAnimationEnd", (e)=>{this.animationCallback(e);});
-            item.addEventListener("animationend", (e)=>{this.animationCallback(e);});
-            item.addEventListener("oanimationend", (e)=>{this.animationCallback(e);});
-            item.addEventListener("ontransitionend", (e)=>{this.animationCallback(e);});
-            item.addEventListener("webkitTransitionEnd", (e)=>{this.animationCallback(e);});
+    animationCallback(item :IListItem, event:TransitionEvent){
+        if(event.srcElement.id == 'amtctnr'){
+            item.dynamics.direction = 0;
         }
     }
 
-    animationCallback(event :any){
-        console.log(event);
-        //this.renderer.removeClass(event.,"going-up");
-        //this.renderer.removeClass(event.target,"going-down");
+    makeListItemStyle(listItem:IListItem,listLength:number):Object{
+
+        let index = 0;
+        if(listItem.dynamics.direction === -1){ index = 0;}
+        if(listItem.dynamics.direction === 0){ index = -1;}
+        if(listItem.dynamics.direction === 1){ index = 1;}
+        index += 3;
+
+        return {
+            'z-index': index,
+            'top': (75 * listItem.dynamics.index) + 'px',
+            'transition-duration': (0.3 + (listItem.dynamics.velocity/listLength*2.5)) + "s"
+        };
     }
 
-    makeListItemStyle(listItem:ListItem,listLength:number):Object{
-        if(listItem.index){
-            return {
-                'z-index': (listItem.direction + 3),
-                'top': (40 * listItem.index) + 'px',
-                'transition-duration': (0.5 + (listItem.velocity/listLength)) + "s"
-            };
-        }else{
-            return {}; 
+    makeProfilePic(listItem: IListItem){
+        return {
+            'background-image': 'url(' + listItem.profileImagePath + ')'
         }
     }
 
 }
 
-interface ListItem {
-    name:string;
+interface IListItem {
+    firstName:string;
+    otherNames:string;
+    profileImagePath:string;
     amount:number;
+
+    dynamics?:IListItemDynamics;
+}
+
+interface IListItemDynamics {
     index?:number;
     velocity?:number;
     direction?:number;
