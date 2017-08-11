@@ -1,0 +1,10 @@
+[
+    { "firstName":"Philip",    "otherNames":"David Plant",   "profileImagePath":"../../../assets/images/pf6.jpg", "amount":100 },
+    { "firstName":"Marcel",    "otherNames":"Maurice Plant", "profileImagePath":"../../../assets/images/pf5.jpg", "amount":90 },
+    { "firstName":"Charlotte", "otherNames":"Plant",         "profileImagePath":"../../../assets/images/pf1.jpg", "amount":80 },
+    { "firstName":"Simon",     "otherNames":"Plant",         "profileImagePath":"../../../assets/images/pf4.jpg", "amount":70 },
+    { "firstName":"Mum",       "otherNames":"Plant",         "profileImagePath":"../../../assets/images/pf2.jpg", "amount":60 },
+    { "firstName":"Kim",       "otherNames":"Williamson",    "profileImagePath":"../../../assets/images/pf3.jpg", "amount":50 },
+    { "firstName":"Connor",    "otherNames":"Fields",        "profileImagePath":"../../../assets/images/pf6.jpg", "amount":40 },
+    { "firstName":"James",     "otherNames":"Gilliland",     "profileImagePath":"../../../assets/images/pf6.jpg", "amount":30 }
+]

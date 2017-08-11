@@ -1,9 +1,10 @@
+<!--<pre>{{sortedAndIndexedDataStream | async | json }}<pre>-->
 <div #listContainer class="list-container">
     <div
      id="amtctnr"
     *ngFor="let item of sortedAndIndexedDataStream | async " 
     class="list-item-container"
-    [ngStyle]="makeListItemStyle(item,list.length)"
+    [ngStyle]="makeListItemStyle(item)"
     (transitionend)="animationCallback(item,$event)"
     >
         <div class="list-item">
@@ -20,9 +21,8 @@
             }"
             >
                 {{item.firstName}}<br/>
-                <span class="other-names">{{item.otherNames}}</span>
+                <span class="other-names">{{item.middleName || null}} {{item.lastName}}</span>
             </div>
-            <div class="awards-container"></div>
             <div 
             class="amount-container"
             [ngClass]="{ 

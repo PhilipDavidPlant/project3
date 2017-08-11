@@ -19,7 +19,7 @@
 }
 
 .list-item-container{
-    height:75px;
+    height:78px;
     position:absolute;
     /*background:white;*/
     width:100%;
@@ -44,22 +44,10 @@
     transition: 0.4s;
 }
 
-.amount-container, .name-container, .profile-pic{
+.amount-container, .name-container, .profile-pic, .awards-container{
     position: absolute;
     top:50%;
     transform: translateY(-50%);
-}
-
-.name-container{
-    left:80px;
-    transition-duration: 0.4s;
-    color:rgb(80,80,80);
-    opacity:1;
-}
-
-.other-names{
-    font-size: 13px;
-    color:rgb(100,100,100);
 }
 
 .profile-pic{
@@ -79,6 +67,26 @@
     transition-duration: 0.4s;
 }
 
+.name-container{
+    left:80px;
+    transition-duration: 0.4s;
+    color:rgb(80,80,80);
+    opacity:1;
+}
+
+.other-names{
+    font-size: 13px;
+    color:rgb(100,100,100);
+}
+
+/*.awards-container{
+    background:rgb(230,230,230);
+    height:32px;
+    width:100px;
+    right:105px;
+    border-radius:16px;
+}*/
+
 .amount-container{
     font-weight:700;
     /*position: relative;
@@ -97,6 +105,10 @@
     color:white;
     right:5px;
     transition-duration: 0.4s;
+
+    border-bottom-color:#fe7588;
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
 }
 
 .amount-going-up{
@@ -104,6 +116,9 @@
     color:white;
     right:120px;
     transition-duration: 0.4s;
+    border-top-color: #a4d6b5;
+    border-top-width: 4px;
+    border-top-style: solid;
 }
 
 .name-going-down{
@@ -111,7 +126,7 @@
     transition-duration: 0.4s;
 }
 
-.ranking-moving {
+.ranking-moving, .awards-moving {
     opacity:0;
     transition-duration: 0.4s;
 }
