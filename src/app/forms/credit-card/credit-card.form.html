@@ -1,0 +1,22 @@
+<p>Form value: {{ creditCardForm.value | json }}</p>
+<form [formGroup]="creditCardForm" novalidate>
+    
+    <md-input-container>
+        <input formControlName='name' mdInput placeholder="Name on card">
+    </md-input-container>
+
+    <md-input-container>
+        <input formControlName='cardNumber' mdInput placeholder="Card number">
+    </md-input-container>
+
+    <md-input-container>
+        <input formControlName='securityNumber' mdInput placeholder="Security number">
+    </md-input-container>
+    
+    <md-input-container>
+    <input mdInput formControlName='expiryDate' [mdDatepicker]="picker" placeholder="Expiry date">
+    <button mdSuffix [mdDatepickerToggle]="picker"></button>
+    </md-input-container>
+    <md-datepicker #picker></md-datepicker>
+
+</form>

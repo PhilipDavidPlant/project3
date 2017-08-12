@@ -6,11 +6,14 @@ import { RouterModule, Routes } from '@angular/router';
 
 //Imports Used by Angular Material
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialGlobalsModule } from './material.globals.module';
+import { MaterialGlobalsModuleLoadFirst } from './material.globals';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 
 import { AppComponent } from './app.component';
+
+//Forms
+import { CreditCardForm } from "app/forms/credit-card/credit-card.form";
 
 //Parts
 import { ListTabsPart } from './parts/list-tabs/list-tabs.part';
@@ -30,7 +33,7 @@ const routes :Routes = [
   { path:"", component: ListTabsPart },
   { path:"authenticate", component: LoginViewComponent },
   { path:"list-test", component: ListTestViewComponent },
-  { path:"form-test", component: CreditCardForm}
+  { path:"form-test", component: CreditCardForm }
 ]
 
 @NgModule({
@@ -38,14 +41,15 @@ const routes :Routes = [
     AppComponent,
     ListTabsPart,
     LoginViewComponent,
-    ListTestViewComponent
+    ListTestViewComponent,
+    CreditCardForm
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpModule,
     NoopAnimationsModule,
-    MaterialGlobalsModule,
+    MaterialGlobalsModuleLoadFirst,
     AngularFireModule.initializeApp(environment.firebase, 'remedy'), 
     AngularFireDatabaseModule, 
     AngularFireAuthModule,

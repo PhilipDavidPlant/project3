@@ -1,23 +1,13 @@
 import { NgModule } from '@angular/core'; 
 
+import { CreditCardForm } from './credit-card/credit-card.form'
+
 @NgModule({
     imports: [
-        MdButtonModule, 
-        MdCheckboxModule,
-        MdListModule,
-        MdTabsModule,
-        MdToolbarModule,
-        MdInputModule
+        CreditCardForm
     ],
     exports: [
-        MdButtonModule, 
-        MdCheckboxModule,
-        MdListModule,
-        MdTabsModule,
-        MdToolbarModule,
-        MdInputModule
+        CreditCardForm
     ],
 })
-export class FormsGlobalsModuleP1 {
-
- }
+export class FormsGlobalsModuleP1 {}

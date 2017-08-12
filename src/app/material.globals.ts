@@ -5,7 +5,9 @@ import {
     MdListModule,
     MdTabsModule,
     MdToolbarModule,
-    MdInputModule
+    MdInputModule,
+    MdDatepickerModule,
+    MdNativeDateModule
 } from '@angular/material';
 
 @NgModule({
@@ -15,7 +17,9 @@ import {
         MdListModule,
         MdTabsModule,
         MdToolbarModule,
-        MdInputModule
+        MdInputModule,
+        MdDatepickerModule,
+        MdNativeDateModule
     ],
     exports: [
         MdButtonModule, 
@@ -23,9 +27,9 @@ import {
         MdListModule,
         MdTabsModule,
         MdToolbarModule,
-        MdInputModule
+        MdInputModule,
+        MdDatepickerModule,
+        MdNativeDateModule
     ],
 })
-export class MaterialGlobalsModuleP1 {
-
- }
+export class MaterialGlobalsModuleLoadFirst {}
