@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 
 //Imports Used by Angular Material
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialGlobalsModule } from './material-globals.module';
+import { MaterialGlobalsModule } from './material.globals.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 
@@ -29,7 +29,8 @@ import { environment } from '../environments/environment';
 const routes :Routes = [
   { path:"", component: ListTabsPart },
   { path:"authenticate", component: LoginViewComponent },
-  { path:"list-test", component: ListTestViewComponent }
+  { path:"list-test", component: ListTestViewComponent },
+  { path:"form-test", component: CreditCardForm}
 ]
 
 @NgModule({
@@ -41,7 +42,7 @@ const routes :Routes = [
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     NoopAnimationsModule,
     MaterialGlobalsModule,

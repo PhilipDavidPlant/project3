@@ -26,6 +26,6 @@ import {
         MdInputModule
     ],
 })
-export class MaterialGlobalsModule {
+export class MaterialGlobalsModuleP1 {
 
  }
