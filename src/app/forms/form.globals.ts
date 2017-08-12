@@ -10,4 +10,4 @@ import { CreditCardForm } from './credit-card/credit-card.form'
         CreditCardForm
     ],
 })
-export class FormsGlobalsModuleP1 {}
+export class FormsGlobalsModuleLoadFirst {}
