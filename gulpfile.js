@@ -2,53 +2,86 @@ var gulp = require('gulp');
 var argv = require('yargs').argv;
 const template = require('gulp-template');
 var rename = require("gulp-rename");
-fs = require("fs");
-var globalsUrl = '';
+var fs = require("fs");
+
 var componentClassName = '';
-var name = '';
+var componentName = '';
 var type = '';
 
-gulp.task('generate', (cb) => {
+var templateUrlTS = 'gulp-templates/';
+var templateUrlHTML = 'gulp-templates/';
+var templateUrlCSS = 'gulp-templates/';
+
+var APIEndpoint = '';
+var saveUrl = '';
+var globalsUrl = '';
+
+gulp.task('generate', () => {
 
     type = argv.type;
-    name = argv.name;
+    componentName = argv.name;
+    APIEndpoint = argv.endpoint;
 
-    saveUrl = 'src/app/' + type + 's/' + name;
-
-    templateUrlTS = 'gulp-templates/';
-    templateUrlHTML = 'gulp-templates/';
-    templateUrlCSS = 'gulp-templates/';
+    saveUrl = 'src/app/' + type + 's/' + componentName;
     globalsUrl = './src/app/' + type + 's/' + type + '.globals.ts';
 
     switch(type){
         case 'form':
-           templateUrl += 'form.template.ts';
+           templateUrlTS += 'form.template.ts';
+           templateUrlHTML += 'form.template.html';
         break;
         case 'part':
-            templateUrl += 'part.template.ts';
+            templateUrlTS += 'part.template.ts';
         break;
         case 'view':
-            templateUrl += 'view.template.ts';
+            templateUrlTS += 'view.template.ts';
         break;
         default:
             error('ERROR','No corresponding type for chosen template');
             return;
     }
 
-    componentClassName = generateClassName(name,type);
-    variableName = generateVariableName(name,type);
+    componentClassName = generateClassName(componentName,type);
+    variableName = generateVariableName(componentName,type);
 
     if(type != 'view'){
         var globalsFile = fs.readFileSync(globalsUrl,'utf8');
         addToModule(globalsFile);
     }
 
-    return gulp.src(templateUrl)
-    .pipe(template({name: name, className: componentClassName, type: type, variableName:variableName}))
-    .pipe(rename(name + '.' + type + '.ts'))
+    return gulp.src(templateUrlTS)
+    .pipe(template({name: componentName, className: componentClassName, type: type, variableName:variableName}))
+    .pipe(rename(componentName + '.' + type + '.ts'))
     .pipe(gulp.dest(saveUrl))
 
 });
+
+// gulp.task('generateTS', () => {
+
+//     return gulp.src(templateUrlTS)
+//     .pipe(template({name: componentName, className: componentClassName, type: type, variableName:variableName}))
+//     .pipe(rename(componentName + '.' + type + '.ts'))
+//     .pipe(gulp.dest(saveUrl))
+
+// });
+
+// gulp.task('generateHTML',() =>{
+//     return gulp.src(templateUrlHTML)
+//     .pipe(template({name: componentName, className: componentClassName, type: type, variableName:variableName}))
+//     .pipe(rename(componentName + '.' + type + '.html'))
+//     .pipe(gulp.dest(saveUrl))
+// });
+
+// gulp.task('generatesCSS',() =>{
+//     return gulp.src(templateUrlCSS)
+//     .pipe(template({name: componentName, className: componentClassName, type: type, variableName:variableName}))
+//     .pipe(rename(componentName + '.' + type + '.css'))
+//     .pipe(gulp.dest(saveUrl))
+// });
+
+// gulp.task('generateService', ()=>{
+
+// });
 
 function addToModule(data){
 
@@ -61,7 +94,7 @@ function addToModule(data){
 
             if(moduleId === '@NgModule'){
 
-                moduleImportString = "import { " + componentClassName + " } from './" + name + "/" + name + '.' + type + "';\n";
+                moduleImportString = "import { " + componentClassName + " } from './" + componentName + "/" + componentName + '.' + type + "';\n";
 
                 dataAsArray.splice((i-3), 0, (moduleImportString));
 
@@ -70,7 +103,6 @@ function addToModule(data){
 
         if(data[i] === 'i' && data[i+1] === 'm'){
             var importId = data.substring(i, i+7);
-            console.log(importId);
             if(importId === "imports"){
                 endOfImportsIndex = (i + 11 );
                 dataAsArray.splice(endOfImportsIndex, 0, "\n        "+ componentClassName +",");
@@ -79,7 +111,6 @@ function addToModule(data){
 
         if(data[i] === 'e' && data[i+1] === 'x'){
             var importId = data.substring(i, i+7);
-            console.log(importId);
             if(importId === "exports"){
                 endOfImportsIndex = (i + 12 );
                 dataAsArray.splice(endOfImportsIndex, 0, "\n        "+ componentClassName +",");
@@ -114,6 +145,8 @@ function generateVariableName(name,type){
             varName += capitalize(nameParts[i]);
         }
     }
+
+    return varName;
 }
 
 function capitalize(string) {
