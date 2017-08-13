@@ -8,7 +8,7 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 })
 export class <%= className %> {
 
-    creditCardForm: FormGroup;
+    <%= variableName %>: FormGroup;
 
     constructor(formBuilder:FormBuilder){
         this.createForm();

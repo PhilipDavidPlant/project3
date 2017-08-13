@@ -15,7 +15,9 @@ gulp.task('generate', (cb) => {
 
     saveUrl = 'src/app/' + type + 's/' + name;
 
-    templateUrl = 'gulp-templates/';
+    templateUrlTS = 'gulp-templates/';
+    templateUrlHTML = 'gulp-templates/';
+    templateUrlCSS = 'gulp-templates/';
     globalsUrl = './src/app/' + type + 's/' + type + '.globals.ts';
 
     switch(type){
@@ -34,20 +36,19 @@ gulp.task('generate', (cb) => {
     }
 
     componentClassName = generateClassName(name,type);
+    variableName = generateVariableName(name,type);
 
-    var globalsFile = fs.readFileSync(globalsUrl,'utf8');
-    addToModule(globalsFile);
+    if(type != 'view'){
+        var globalsFile = fs.readFileSync(globalsUrl,'utf8');
+        addToModule(globalsFile);
+    }
 
     return gulp.src(templateUrl)
-    .pipe(template({name: name, className: componentClassName, type: type}))
+    .pipe(template({name: name, className: componentClassName, type: type, variableName:variableName}))
     .pipe(rename(name + '.' + type + '.ts'))
     .pipe(gulp.dest(saveUrl))
 
 });
-
-// gulp.task('addToModuleTask', ['generate'], () => {
-//     console.log("running add to module task");
-// });
 
 function addToModule(data){
 
@@ -93,7 +94,7 @@ function addToModule(data){
 }
 
 function generateClassName(name,type){
-    nameParts = name.split("-");
+    var nameParts = name.split("-");
     className = "";
     for( part of nameParts){
         className += capitalize(part);
@@ -101,6 +102,18 @@ function generateClassName(name,type){
     className += capitalize(type);
 
     return className;
+}
+
+function generateVariableName(name,type){
+    var nameParts = name.split("-");
+    varName = "";
+    for(var i=0; i < nameParts.length; i++){
+        if(i == 0){
+            varName += nameParts[i];
+        }else{
+            varName += capitalize(nameParts[i]);
+        }
+    }
 }
 
 function capitalize(string) {
