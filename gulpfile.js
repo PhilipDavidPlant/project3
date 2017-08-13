@@ -2,15 +2,21 @@ var gulp = require('gulp');
 var argv = require('yargs').argv;
 const template = require('gulp-template');
 var rename = require("gulp-rename");
+fs = require("fs");
+var globalsUrl = '';
+var componentClassName = '';
+var name = '';
+var type = '';
 
-gulp.task('generate', () => {
+gulp.task('generate', (cb) => {
 
-    var type = argv.type;
-    var name = argv.name;
+    type = argv.type;
+    name = argv.name;
 
     saveUrl = 'src/app/' + type + 's/' + name;
 
     templateUrl = 'gulp-templates/';
+    globalsUrl = './src/app/' + type + 's/' + type + '.globals.ts';
 
     switch(type){
         case 'form':
@@ -27,14 +33,64 @@ gulp.task('generate', () => {
             return;
     }
 
-    console.log("generating using template:" + templateUrl);
+    componentClassName = generateClassName(name,type);
+
+    var globalsFile = fs.readFileSync(globalsUrl,'utf8');
+    addToModule(globalsFile);
 
     return gulp.src(templateUrl)
-    .pipe(template({name: name, className: generateClassName(name,type), type: type}))
+    .pipe(template({name: name, className: componentClassName, type: type}))
     .pipe(rename(name + '.' + type + '.ts'))
-    .pipe(gulp.dest(saveUrl));
+    .pipe(gulp.dest(saveUrl))
 
 });
+
+// gulp.task('addToModuleTask', ['generate'], () => {
+//     console.log("running add to module task");
+// });
+
+function addToModule(data){
+
+    dataAsArray = data.split("");
+    moduleImportString = "";
+
+    for(var i=0; i< data.length; i++){
+        if(data[i] === '@'){
+            var moduleId = data.substring(i, i+9);
+
+            if(moduleId === '@NgModule'){
+
+                moduleImportString = "import { " + componentClassName + " } from './" + name + "/" + name + '.' + type + "';\n";
+
+                dataAsArray.splice((i-3), 0, (moduleImportString));
+
+            }
+        }
+
+        if(data[i] === 'i' && data[i+1] === 'm'){
+            var importId = data.substring(i, i+7);
+            console.log(importId);
+            if(importId === "imports"){
+                endOfImportsIndex = (i + 11 );
+                dataAsArray.splice(endOfImportsIndex, 0, "\n        "+ componentClassName +",");
+            }
+        }
+
+        if(data[i] === 'e' && data[i+1] === 'x'){
+            var importId = data.substring(i, i+7);
+            console.log(importId);
+            if(importId === "exports"){
+                endOfImportsIndex = (i + 12 );
+                dataAsArray.splice(endOfImportsIndex, 0, "\n        "+ componentClassName +",");
+            }
+        }
+
+        var saveString = dataAsArray.join("");
+        fs.writeFile(globalsUrl, saveString, function(err) {
+            if (err) return console.log(err);
+        });
+    }
+}
 
 function generateClassName(name,type){
     nameParts = name.split("-");

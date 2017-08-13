@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'; 
 
-import { CreditCardForm } from './credit-card/credit-card.form'
+import { CreditCardForm } from './credit-card/credit-card.form';
 
 @NgModule({
     imports: [
