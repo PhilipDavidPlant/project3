@@ -58,10 +58,18 @@ gulp.task('generate', () => {
 
 // gulp.task('generateTS', () => {
 
-//     return gulp.src(templateUrlTS)
-//     .pipe(template({name: componentName, className: componentClassName, type: type, variableName:variableName}))
-//     .pipe(rename(componentName + '.' + type + '.ts'))
-//     .pipe(gulp.dest(saveUrl))
+    return gulp.src('src/css/main.sass')
+    .pipe(map(function(file, cb) {
+      var fileContents = file.contents.toString();
+      // --- do any string manipulation here ---
+      fileContents = fileContents.replace(/foo/, 'bar');
+      fileContents = 'First line\n' + fileContents;
+      // ---------------------------------------
+      file.contents = new Buffer(fileContents);
+      cb(null, file);
+    }))
+    .pipe(gulp.dest('dist'));
+
 
 // });
 
