@@ -44,10 +44,10 @@ gulp.task('generate', () => {
     componentClassName = generateClassName(componentName,type);
     variableName = generateVariableName(componentName,type);
 
-    if(type != 'view'){
-        var globalsFile = fs.readFileSync(globalsUrl,'utf8');
-        addToModule(globalsFile);
-    }
+    // if(type != 'view'){
+    //     var globalsFile = fs.readFileSync(globalsUrl,'utf8');
+    //     addToModule(globalsFile);
+    // }
 
     return gulp.src(templateUrlTS)
     .pipe(template({name: componentName, className: componentClassName, type: type, variableName:variableName}))
