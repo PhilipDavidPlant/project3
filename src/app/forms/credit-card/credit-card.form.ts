@@ -1,27 +1,36 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { creditCardFormService } from './credit-card.form.service';
 
 @Component({
     selector: 'credit-card-form',
     templateUrl: 'credit-card.form.html',
-    styleUrls: ['credit-card.form.css']
+    styleUrls: ['credit-card.form.css'],
+    providers: [ creditCardFormService ]
 })
 export class CreditCardForm {
 
     creditCardForm: FormGroup;
 
-    constructor(formBuilder:FormBuilder){
+    constructor( private formBuilder:FormBuilder, private service:creditCardFormService ){
         this.createForm();
     }
 
-    private createForm(){
+    private createForm():void{
+        this.creditCardForm = this.formBuilder.group({
+          name : '',
+          cardNumber : [ '', Validators.required ],
+          securityNumber : [ '', Validators.required ], 
+          expiryDate : [ new Date(), Validators.required ] 
+        });
+    }
+
+    private editForm():void{
 
     }
 
-    // creditCardForm = new FormGroup({
-    //   name : new FormControl(),
-    //   cardNumber : new FormControl(),
-    //   securityNumber : new FormControl(),
-    //   expiryDate : new FormControl()
-    // });
+    private deleteForm():void{
+
+    }
+
 }

@@ -1,22 +1,35 @@
 <p>Form value: {{ creditCardForm.value | json }}</p>
+<p>Form status: {{ creditCardForm.status | json }}</p>
 <form [formGroup]="creditCardForm" novalidate>
     
+    <div class='card-types-container'>
+        <i class="fa fa-cc-amex" aria-hidden="true"></i>
+        <i class="fa fa-cc-amex" aria-hidden="true"></i>
+        <i class="fa fa-cc-amex" aria-hidden="true"></i>
+    </div>
+
     <md-input-container>
         <input formControlName='name' mdInput placeholder="Name on card">
     </md-input-container>
 
     <md-input-container>
         <input formControlName='cardNumber' mdInput placeholder="Card number">
+        <md-error *ngIf="creditCardForm.controls.cardNumber.hasError('required')">
+            This field is <strong>required</strong>
+        </md-error>
     </md-input-container>
 
     <md-input-container>
         <input formControlName='securityNumber' mdInput placeholder="Security number">
+        <md-error *ngIf="creditCardForm.controls.cardNumber.hasError('required')">
+            This field is <strong>required</strong>
+        </md-error>
     </md-input-container>
     
     <md-input-container>
     <input mdInput formControlName='expiryDate' [mdDatepicker]="picker" placeholder="Expiry date">
     <button mdSuffix [mdDatepickerToggle]="picker"></button>
     </md-input-container>
-    <md-datepicker #picker></md-datepicker>
+    <md-datepicker touchUi="true" #picker></md-datepicker>
 
 </form>

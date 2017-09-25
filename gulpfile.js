@@ -44,10 +44,10 @@ gulp.task('generate', () => {
     componentClassName = generateClassName(componentName,type);
     variableName = generateVariableName(componentName,type);
 
-    // if(type != 'view'){
-    //     var globalsFile = fs.readFileSync(globalsUrl,'utf8');
-    //     addToModule(globalsFile);
-    // }
+    if(type != 'view'){
+        var globalsFile = fs.readFileSync(globalsUrl,'utf8');
+        addToModule(globalsFile);
+    }
 
     return gulp.src(templateUrlTS)
     .pipe(template({name: componentName, className: componentClassName, type: type, variableName:variableName}))
@@ -58,17 +58,17 @@ gulp.task('generate', () => {
 
 // gulp.task('generateTS', () => {
 
-    return gulp.src('src/css/main.sass')
-    .pipe(map(function(file, cb) {
-      var fileContents = file.contents.toString();
-      // --- do any string manipulation here ---
-      fileContents = fileContents.replace(/foo/, 'bar');
-      fileContents = 'First line\n' + fileContents;
-      // ---------------------------------------
-      file.contents = new Buffer(fileContents);
-      cb(null, file);
-    }))
-    .pipe(gulp.dest('dist'));
+    // return gulp.src('src/css/main.sass')
+    // .pipe(map(function(file, cb) {
+    //   var fileContents = file.contents.toString();
+    //   // --- do any string manipulation here ---
+    //   fileContents = fileContents.replace(/foo/, 'bar');
+    //   fileContents = 'First line\n' + fileContents;
+    //   // ---------------------------------------
+    //   file.contents = new Buffer(fileContents);
+    //   cb(null, file);
+    // }))
+    // .pipe(gulp.dest('dist'));
 
 
 // });
