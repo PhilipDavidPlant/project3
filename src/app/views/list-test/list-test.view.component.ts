@@ -72,7 +72,7 @@ export class ListTestViewComponent implements OnInit {
     }
 
     processItems(list: any[]){
-
+        console.log(list);
         //let listClone = list.slice(0);
         list.sort( (a,b) => b.amount-a.amount);
 
